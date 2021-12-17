@@ -25,10 +25,11 @@ if ($file = fopen("btob.txt", "r")) {
 }
 
 function insertWord($word) {
+    global $worldOfWordsDatabase;
     // create table as order
     $firstCharacterCode = mb_ord($word);
     $firstCharacterCode = "character_" . $firstCharacterCode;
-    global $worldOfWordsDatabase;
+    $worldOfWordsDatabase->query("create table if not exists {$firstCharacterCode} (id int primary key auto_increment, wordId int, word text unique)");
     if($query = $worldOfWordsDatabase->query("select * from $firstCharacterCode where word = '{$word}'")->fetch_array(MYSQLI_ASSOC)) {
         return $query['wordId'];
     } else {
